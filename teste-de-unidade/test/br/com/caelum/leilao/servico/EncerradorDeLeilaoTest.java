@@ -35,4 +35,24 @@ public class EncerradorDeLeilaoTest {
 		Assert.assertTrue(leilao2.isEncerrado());
 	}
 
+	@Test
+	public void naoDeveEncerrarLeiloesQueComecaramMenosDeUmaSemanaAtras() {
+
+		Calendar ontem = Calendar.getInstance();
+		ontem.add(Calendar.DAY_OF_MONTH, -1);
+
+		Leilao leilao1 = new CriadorDeLeilao().para("TV de plasma").naData(ontem).constroi();
+		Leilao leilao2 = new CriadorDeLeilao().para("Geladeira").naData(ontem).constroi();
+
+		LeilaoDao daoFalso = Mockito.mock(LeilaoDao.class);
+		Mockito.when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		encerrador.encerra();
+
+		Assert.assertEquals(0, encerrador.getTotalEncerrados());
+		Assert.assertFalse(leilao1.isEncerrado());
+		Assert.assertFalse(leilao2.isEncerrado());
+	}
+
 }
