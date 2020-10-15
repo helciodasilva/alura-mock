@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import br.com.caelum.leilao.builder.CriadorDeLeilao;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.infra.dao.LeilaoDao;
+import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
 
 public class EncerradorDeLeilaoTest {
 	
@@ -25,7 +26,7 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao2 = new CriadorDeLeilao().para("Geladeira").naData(antiga).constroi();
 		List<Leilao> leiloesAntigos = Arrays.asList(leilao1, leilao2);
 		
-		LeilaoDao daoFalso = Mockito.mock(LeilaoDao.class);
+		RepositorioDeLeiloes daoFalso = Mockito.mock(LeilaoDao.class);
 		Mockito.when(daoFalso.correntes()).thenReturn(leiloesAntigos);
 		
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
@@ -45,7 +46,7 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao1 = new CriadorDeLeilao().para("TV de plasma").naData(ontem).constroi();
 		Leilao leilao2 = new CriadorDeLeilao().para("Geladeira").naData(ontem).constroi();
 
-		LeilaoDao daoFalso = Mockito.mock(LeilaoDao.class);
+		RepositorioDeLeiloes daoFalso = Mockito.mock(RepositorioDeLeiloes.class);
 		Mockito.when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
@@ -59,7 +60,7 @@ public class EncerradorDeLeilaoTest {
 	@Test
 	public void naoDeveEncerrarLeiloesCasoNaoHajaNenhum() {
 
-		LeilaoDao daoFalso = Mockito.mock(LeilaoDao.class);
+		RepositorioDeLeiloes daoFalso = Mockito.mock(RepositorioDeLeiloes.class);
 		Mockito.when(daoFalso.correntes()).thenReturn(new ArrayList<Leilao>());
 
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);

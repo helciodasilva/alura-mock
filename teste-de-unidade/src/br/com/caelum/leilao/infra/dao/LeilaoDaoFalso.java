@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.com.caelum.leilao.dominio.Leilao;
 
-public class LeilaoDaoFalso {
+public class LeilaoDaoFalso implements RepositorioDeLeiloes {
 
 	private static List<Leilao> leiloes = new ArrayList<Leilao>();;
 	
