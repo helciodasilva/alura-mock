@@ -1,5 +1,6 @@
 package br.com.caelum.leilao.servico;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -53,6 +54,18 @@ public class EncerradorDeLeilaoTest {
 		Assert.assertEquals(0, encerrador.getTotalEncerrados());
 		Assert.assertFalse(leilao1.isEncerrado());
 		Assert.assertFalse(leilao2.isEncerrado());
+	}
+	
+	@Test
+	public void naoDeveEncerrarLeiloesCasoNaoHajaNenhum() {
+
+		LeilaoDao daoFalso = Mockito.mock(LeilaoDao.class);
+		Mockito.when(daoFalso.correntes()).thenReturn(new ArrayList<Leilao>());
+
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		encerrador.encerra();
+
+		Assert.assertEquals(0, encerrador.getTotalEncerrados());
 	}
 
 }
