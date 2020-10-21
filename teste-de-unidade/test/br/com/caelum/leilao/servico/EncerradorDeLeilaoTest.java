@@ -69,4 +69,22 @@ public class EncerradorDeLeilaoTest {
 		Assert.assertEquals(0, encerrador.getTotalEncerrados());
 	}
 
+	@Test
+	public void deveAtualizarLeiloesEncerrados() {
+
+		Calendar antiga = Calendar.getInstance();
+		antiga.set(1999, 1, 20);
+
+		Leilao leilao1 = new CriadorDeLeilao().para("TV de plasma").naData(antiga).constroi();
+
+		RepositorioDeLeiloes daoFalso = Mockito.mock(RepositorioDeLeiloes.class);
+		Mockito.when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1));
+
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		encerrador.encerra();
+
+		// verificando que o metodo atualiza foi realmente invocado!
+		Mockito.verify(daoFalso).atualiza(leilao1);
+	}
+
 }
