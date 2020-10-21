@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import br.com.caelum.leilao.builder.CriadorDeLeilao;
@@ -98,4 +99,25 @@ public class EncerradorDeLeilaoTest {
 		Mockito.verify(daoFalso, Mockito.times(1)).atualiza(leilao1);
 	}
 
+	
+	@Test
+	public void deveEnviarEmailAposPersistirLeilaoEncerrado() {
+		Calendar antiga = Calendar.getInstance();
+		antiga.set(1999, 1, 20);
+
+		Leilao leilao1 = new CriadorDeLeilao().para("TV de plasma").naData(antiga).constroi();
+
+		RepositorioDeLeiloes daoFalso = Mockito.mock(RepositorioDeLeiloes.class);
+		Mockito.when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1));
+
+		EnviadorDeEmail carteiroFalso = Mockito.mock(EnviadorDeEmail.class);
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso, carteiroFalso);
+
+		encerrador.encerra();
+
+		InOrder inOrder = Mockito.inOrder(daoFalso, carteiroFalso);
+		inOrder.verify(daoFalso, Mockito.times(1)).atualiza(leilao1);
+		inOrder.verify(carteiroFalso, Mockito.times(1)).envia(leilao1);
+	}
+	
 }
