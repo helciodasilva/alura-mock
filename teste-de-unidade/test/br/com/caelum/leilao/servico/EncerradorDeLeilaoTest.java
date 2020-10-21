@@ -84,7 +84,7 @@ public class EncerradorDeLeilaoTest {
 		encerrador.encerra();
 
 		// verificando que o metodo atualiza foi realmente invocado!
-		Mockito.verify(daoFalso).atualiza(leilao1);
+		Mockito.verify(daoFalso, Mockito.times(1)).atualiza(leilao1);
 	}
 
 }
