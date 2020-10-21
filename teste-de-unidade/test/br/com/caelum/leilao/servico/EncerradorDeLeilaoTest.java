@@ -55,6 +55,9 @@ public class EncerradorDeLeilaoTest {
 		Assert.assertEquals(0, encerrador.getTotalEncerrados());
 		Assert.assertFalse(leilao1.isEncerrado());
 		Assert.assertFalse(leilao2.isEncerrado());
+		
+		Mockito.verify(daoFalso, Mockito.never()).atualiza(leilao1);
+		Mockito.verify(daoFalso, Mockito.never()).atualiza(leilao2);
 	}
 	
 	@Test
