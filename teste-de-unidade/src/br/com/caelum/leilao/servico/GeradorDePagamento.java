@@ -7,17 +7,26 @@ import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Pagamento;
 import br.com.caelum.leilao.infra.dao.RepositorioDeLeiloes;
 import br.com.caelum.leilao.infra.dao.RepositorioDePagamentos;
+import br.com.caelum.leilao.infra.relogio.Relogio;
+import br.com.caelum.leilao.infra.relogio.RelogioDoSistema;
 
 public class GeradorDePagamento {
 
 	private final RepositorioDePagamentos pagamentos;
 	private final RepositorioDeLeiloes leiloes;
 	private final Avaliador avaliador;
+	private final Relogio relogio;
 
-	public GeradorDePagamento(RepositorioDeLeiloes leiloes, RepositorioDePagamentos pagamentos, Avaliador avaliador) {
+	public GeradorDePagamento(RepositorioDeLeiloes leiloes, RepositorioDePagamentos pagamentos, Avaliador avaliador,
+			Relogio relogio) {
 		this.leiloes = leiloes;
 		this.pagamentos = pagamentos;
 		this.avaliador = avaliador;
+		this.relogio = relogio;
+	}
+
+	public GeradorDePagamento(RepositorioDeLeiloes leiloes, RepositorioDePagamentos pagamentos, Avaliador avaliador) {
+		this(leiloes, pagamentos, avaliador, new RelogioDoSistema());
 	}
 
 	public void gera() {
@@ -33,7 +42,7 @@ public class GeradorDePagamento {
 	}
 
 	private Calendar primeiroDiaUtil() {
-		Calendar data = Calendar.getInstance();
+		Calendar data = relogio.hoje();
 		int diaDaSemana = data.get(Calendar.DAY_OF_WEEK);
 
 		if (diaDaSemana == Calendar.SATURDAY)
