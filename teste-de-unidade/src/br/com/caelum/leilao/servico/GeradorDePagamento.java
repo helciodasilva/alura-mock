@@ -26,8 +26,21 @@ public class GeradorDePagamento {
 		for (Leilao leilao : leiloesEncerrados) {
 			avaliador.avalia(leilao);
 
-			Pagamento novoPagamento = new Pagamento(avaliador.getMaiorLance(), Calendar.getInstance());
+			// agora empurramos para o próximo dia útil
+			Pagamento novoPagamento = new Pagamento(avaliador.getMaiorLance(), primeiroDiaUtil());
 			pagamentos.salva(novoPagamento);
 		}
+	}
+
+	private Calendar primeiroDiaUtil() {
+		Calendar data = Calendar.getInstance();
+		int diaDaSemana = data.get(Calendar.DAY_OF_WEEK);
+
+		if (diaDaSemana == Calendar.SATURDAY)
+			data.add(Calendar.DAY_OF_MONTH, 2);
+		else if (diaDaSemana == Calendar.SUNDAY)
+			data.add(Calendar.DAY_OF_MONTH, 1);
+
+		return data;
 	}
 }
