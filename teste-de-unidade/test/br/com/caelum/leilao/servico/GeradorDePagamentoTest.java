@@ -21,17 +21,16 @@ public class GeradorDePagamentoTest {
 	@Test
 	public void deveGerarPagamentoParaUmLeilaoEncerrado() {
 
-		RepositorioDeLeiloes leiloes = mock(RepositorioDeLeiloes.class);
-		RepositorioDePagamentos pagamentos = mock(RepositorioDePagamentos.class);
-		Avaliador avaliador = mock(Avaliador.class);
+		RepositorioDeLeiloes leiloes = Mockito.mock(RepositorioDeLeiloes.class);
+		RepositorioDePagamentos pagamentos = Mockito.mock(RepositorioDePagamentos.class);
 
 		Leilao leilao = new CriadorDeLeilao().para("Playstation").lance(new Usuario("José da Silva"), 2000.0)
 				.lance(new Usuario("Maria Pereira"), 2500.0).constroi();
 
 		Mockito.when(leiloes.encerrados()).thenReturn(Arrays.asList(leilao));
-		Mockito.when(avaliador.getMaiorLance()).thenReturn(2500.0);
 
-		GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, avaliador);
+		// aqui passamos uma instância concreta de Avaliador
+		GeradorDePagamento gerador = new GeradorDePagamento(leiloes, pagamentos, new Avaliador());
 		gerador.gera();
 
 		ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
