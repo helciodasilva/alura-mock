@@ -176,15 +176,13 @@ public class EncerradorDeLeilaoTest {
 		Mockito.when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 
 		EnviadorDeEmail carteiroFalso = Mockito.mock(EnviadorDeEmail.class);
-		Mockito.doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao1);
-		Mockito.doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao2);
+		Mockito.doThrow(new RuntimeException()).when(daoFalso).atualiza(Mockito.any(Leilao.class));
 
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso, carteiroFalso);
 
 		encerrador.encerra();
 
-		Mockito.verify(carteiroFalso, Mockito.never()).envia(leilao1);
-		Mockito.verify(carteiroFalso, Mockito.never()).envia(leilao2);
+		Mockito.verify(carteiroFalso, Mockito.never()).envia(Mockito.any(Leilao.class));
 	}
 
 }
